@@ -21,4 +21,9 @@ public class LoginServiceImpl implements LoginService{
     public Integer updatePwd(User user) {
         return loginMapper.updatePwd(user);
     }
+
+    @Override
+    public Integer region(User user) {
+        return loginMapper.region(user);
+    }
 }

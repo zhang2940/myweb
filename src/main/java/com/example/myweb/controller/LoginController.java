@@ -44,7 +44,7 @@ public class LoginController {
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(user.getUsername(), user.getPassword());
         try{
             subject.login(usernamePasswordToken);
-            return ResultVO.success("login");
+            return ResultVO.success();
         }catch (UnknownAccountException unknownAccountException){
             return ResultVO.error(ResultStatus.ERROR_CODE,"用户不存在");
         }catch (IncorrectCredentialsException e){
@@ -56,7 +56,7 @@ public class LoginController {
      * @param user
      * @return
      */
-    @RequestMapping("/logins")
+    @RequestMapping("/upd_pwd")
     public ResultVO updatePwd(@RequestBody User user){
         Integer count = loginService.updatePwd(user);
 
@@ -66,11 +66,18 @@ public class LoginController {
        return ResultVO.error("修改失败");
     }
 
-
-    @RequestMapping("/findAll")
-    public ResultVO Test(@RequestBody User user){
-        System.out.println("==========");
-        return ResultVO.error("修改失败");
+    /**
+     * 注册用户
+     * @param user
+     * @return
+     */
+    @RequestMapping("/region")
+    public ResultVO region(@RequestBody User user){
+        Integer region = loginService.region(user);
+        if (region==0||region==null){
+            return ResultVO.error("注册失败");
+        }
+        return ResultVO.success("注册成功");
     }
 
 

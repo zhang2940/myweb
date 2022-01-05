@@ -8,4 +8,6 @@ public interface LoginMapper {
     User login(String username);
 
     Integer updatePwd(User user);
+
+    Integer region(User user);
 }

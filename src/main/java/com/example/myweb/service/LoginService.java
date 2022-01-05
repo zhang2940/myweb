@@ -6,4 +6,6 @@ public interface LoginService {
     User login(String username);
 
     Integer updatePwd(User user);
+
+    Integer region(User user);
 }

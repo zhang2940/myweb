@@ -27,8 +27,8 @@ public class ShiroConfig {
          * role:拥有某个角色权限才可以访问
          */
         LinkedHashMap<String, String> filterMap = new LinkedHashMap<>();
-        filterMap.put("/log/login","perms[users:add]");
-//        filterMap.put("/log/login","anon");
+        filterMap.put("/log/region","perms[users:add]");
+//        filterMap.put("/log/region","anon");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);
         return shiroFilterFactoryBean;
     }
