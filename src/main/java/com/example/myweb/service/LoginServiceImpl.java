@@ -2,6 +2,7 @@ package com.example.myweb.service;
 
 import com.example.myweb.mapper.LoginMapper;
 import com.example.myweb.pojo.User;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -24,6 +25,7 @@ public class LoginServiceImpl implements LoginService{
 
     @Override
     public Integer region(User user) {
-        return loginMapper.region(user);
+        User users=new User(new Md5Hash(user.getUsername()).toString(),new Md5Hash(user.getPassword()).toString());
+        return loginMapper.region(users);
     }
 }

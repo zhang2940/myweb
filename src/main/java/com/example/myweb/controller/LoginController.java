@@ -4,14 +4,13 @@ import com.example.myweb.pojo.User;
 import com.example.myweb.result.ResultStatus;
 import com.example.myweb.result.ResultVO;
 import com.example.myweb.service.LoginService;
+import com.example.myweb.util.JwtUtil;
 import com.example.myweb.util.RedisUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.authz.annotation.RequiresRoles;
-import org.apache.shiro.mgt.SecurityManager;
-import org.apache.shiro.realm.text.TextConfigurationRealm;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.subject.Subject;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,8 +18,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
+import java.util.HashMap;
 
 @CrossOrigin
 @RestController
@@ -41,9 +43,16 @@ public class LoginController {
     @RequestMapping("/login")
     public ResultVO login(@RequestBody User user, HttpServletRequest request, HttpServletResponse response){
         Subject subject= SecurityUtils.getSubject();
-        UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(user.getUsername(), user.getPassword());
+        UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(new Md5Hash(user.getUsername()).toString(),new Md5Hash(user.getPassword()).toString());
         try{
             subject.login(usernamePasswordToken);
+            HashMap<String, String> objectObjectHashMap = new HashMap<>();
+            objectObjectHashMap.put("username",usernamePasswordToken.getUsername());
+//            设置token过期时间为30分钟
+            String token = JwtUtil.getInstance().create("token", objectObjectHashMap, "用户信息", new Date(System.currentTimeMillis() + (1800 * 1000)), new Date());
+            Cookie cookie=new Cookie("token",token);
+            cookie.setMaxAge(3600);
+            response.addCookie(cookie);
             return ResultVO.success();
         }catch (UnknownAccountException unknownAccountException){
             return ResultVO.error(ResultStatus.ERROR_CODE,"用户不存在");

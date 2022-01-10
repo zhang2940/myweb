@@ -27,6 +27,9 @@ public class RedisUtil {
     public void close(){
         RedisConnectionUtils.unbindConnection(redisTemplate.getConnectionFactory());
     }
-
+    public Boolean ifExist(String key){
+        Boolean aBoolean = redisTemplate.hasKey(key);
+        return aBoolean;
+    }
 
 }

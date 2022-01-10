@@ -30,6 +30,6 @@
         <if test="email!=null and email != ''">
         ,#{email,jdbcType=VARCHAR}
         </if>
-                                   )
+        )
     </insert>
 </mapper>
