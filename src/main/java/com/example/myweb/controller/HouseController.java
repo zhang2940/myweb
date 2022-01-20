@@ -41,14 +41,16 @@ public class HouseController {
     @Resource
     private HouseService houseService;
 
+    private String pictureUrl;
+
 
     private Logger logger= LoggerFactory.getLogger(this.getClass());
 
     @Resource
     private HouseService service;
 
-    @RequestMapping("/getHouses")
-    public ResultVO getAllHouse(String id){
+    @RequestMapping(value = "/getHouses",method = RequestMethod.GET)
+    public ResultVO getAllHouse(Integer id){
         List<Houses> allHouse = service.getAllHouse(id);
         return new ResultVO(allHouse);
     }
@@ -97,14 +99,20 @@ public class HouseController {
                 return ResultVO.error("上传失败，图片返回地址为空");
             }
            logger.info("七牛云返回的图片链接:" + path);
-           return ResultVO.success(path);
+            this.pictureUrl="http://"+path;
+           return ResultVO.success();
         }
         return ResultVO.error("上传失败");
     }
-    @RequestMapping(value = "/houseMsg",method = RequestMethod.POST)
-    public Integer addHouse(@RequestBody Houses houses){
+    @RequestMapping(value = "/add_house",method = RequestMethod.POST)
+    public ResultVO addHouse(@RequestBody Houses houses){
+        houses.setPictureUrl(this.pictureUrl);
         Integer integer = houseService.addHouse(houses);
-        return integer;
+        if (integer!=0){
+            return ResultVO.success();
+
+        }
+        return ResultVO.error("图片上传异常");
 
     }
 

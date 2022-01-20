@@ -5,6 +5,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 @Component
 public class RedisUtil {
@@ -30,6 +31,9 @@ public class RedisUtil {
     public Boolean ifExist(String key){
         Boolean aBoolean = redisTemplate.hasKey(key);
         return aBoolean;
+    }
+    public void putInHash(String key,Map map){
+        redisTemplate.opsForHash().putAll(key,map);
     }
 
 }

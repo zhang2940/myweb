@@ -12,6 +12,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
+import java.nio.file.Files;
 
 @Component
 public class LoginFilter implements HandlerInterceptor {
@@ -23,7 +24,7 @@ public class LoginFilter implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         logger.info("拦截请求，验证token");
         Cookie[] cookies = request.getCookies();
-        if (cookies.length==0){
+        if (cookies==null || cookies.length==0){
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json; charset=utf-8");
             JSONObject jsonObject = new JSONObject();
@@ -35,7 +36,8 @@ public class LoginFilter implements HandlerInterceptor {
             out.close();
             return false;
         }
-        boolean verify = JwtUtil.getInstance().verify("token");
+        String token=String.valueOf(cookies);
+        boolean verify = JwtUtil.getInstance().verify(token);
         if (verify){
             return true;
         }else {

@@ -13,7 +13,7 @@ public class HouseServiceImpl implements HouseService{
     @Resource
     private HousesMapper housesMapper;
     @Override
-    public List<Houses> getAllHouse(String id) {
+    public List<Houses> getAllHouse(Integer id) {
         return housesMapper.getAllHouse(id);
     }
 

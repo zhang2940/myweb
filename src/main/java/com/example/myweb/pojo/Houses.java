@@ -10,6 +10,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 public class Houses implements Serializable {
+    private Integer id;
     private String pictureUrl;
     private Double price;
     private String comments;

@@ -4,7 +4,7 @@ public class ResultVO<T> extends ResultStatus {
 
     private Integer code;
     private String msg;
-    private T date;
+    private T data;
 
     public Integer getCode() {
         return code;
@@ -22,23 +22,23 @@ public class ResultVO<T> extends ResultStatus {
         this.msg = msg;
     }
 
-    public T getDate() {
-        return date;
+    public T getData() {
+        return data;
     }
 
-    public void setDate(T date) {
-        this.date = date;
+    public void setData(T data) {
+        this.data = data;
     }
 
-    public ResultVO(T date){
+    public ResultVO(T data){
         this.code=SUCCESS_CODE;
         this.msg=SUCCESS_MSG;
-        this.date=date;
+        this.data=data;
     }
-    public ResultVO(Integer code,String msg,T date){
+    public ResultVO(Integer code,String msg,T data){
         this.code=code;
         this.msg=msg;
-        this.date=date;
+        this.data=data;
     }
     public ResultVO(Integer code,String msg){
         this.code=code;
@@ -56,8 +56,9 @@ public class ResultVO<T> extends ResultStatus {
     public static ResultVO success(int code,String msg){
         return new ResultVO(code,msg);
     }
-    public static ResultVO success(Object date){
-        return new ResultVO(SUCCESS_CODE,SUCCESS_MSG,date);
+
+    public static ResultVO success(Object data){
+        return new ResultVO(SUCCESS_CODE,SUCCESS_MSG,data);
     }
 //    异常返回
     public static ResultVO error(String msg){

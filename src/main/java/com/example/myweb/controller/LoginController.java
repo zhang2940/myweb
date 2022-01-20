@@ -5,6 +5,7 @@ import com.example.myweb.result.ResultStatus;
 import com.example.myweb.result.ResultVO;
 import com.example.myweb.service.LoginService;
 import com.example.myweb.util.JwtUtil;
+import com.example.myweb.util.RabbitMQUtil;
 import com.example.myweb.util.RedisUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -12,10 +13,7 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.subject.Subject;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
@@ -34,13 +32,16 @@ public class LoginController {
     @Resource
     private RedisUtil redisUtil;
 
+    @Resource
+    private RabbitMQUtil rabbitMQUtil;
+
 
     /**
      * 登录
      * @param user
      * @return
      */
-    @RequestMapping("/login")
+    @RequestMapping(value = "/login",method = RequestMethod.POST)
     public ResultVO login(@RequestBody User user, HttpServletRequest request, HttpServletResponse response){
         Subject subject= SecurityUtils.getSubject();
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(new Md5Hash(user.getUsername()).toString(),new Md5Hash(user.getPassword()).toString());
@@ -65,7 +66,7 @@ public class LoginController {
      * @param user
      * @return
      */
-    @RequestMapping("/upd_pwd")
+    @RequestMapping(value = "/upd_pwd",method = RequestMethod.POST)
     public ResultVO updatePwd(@RequestBody User user){
         Integer count = loginService.updatePwd(user);
 
@@ -80,7 +81,7 @@ public class LoginController {
      * @param user
      * @return
      */
-    @RequestMapping("/region")
+    @RequestMapping(value = "/region",method = RequestMethod.POST)
     public ResultVO region(@RequestBody User user){
         Integer region = loginService.region(user);
         if (region==0||region==null){
@@ -88,6 +89,16 @@ public class LoginController {
         }
         return ResultVO.success("注册成功");
     }
+    /**
+     * 注册用户
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "/sendmsg",method = RequestMethod.POST)
+    public ResultVO sendmsg(){
+        System.out.println(rabbitMQUtil.sendMsg());
 
+        return ResultVO.success();
+    }
 
 }

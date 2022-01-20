@@ -8,6 +8,6 @@ import java.util.List;
 
 
 public interface HouseService {
-    List<Houses> getAllHouse(String id);
+    List<Houses> getAllHouse(Integer id);
     Integer addHouse(Houses houses);
 }
