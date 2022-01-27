@@ -24,7 +24,17 @@ public class LoginFilter implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         logger.info("拦截请求，验证token");
         Cookie[] cookies = request.getCookies();
-        if (cookies==null || cookies.length==0){
+
+        String token=null;
+        if(cookies != null && cookies.length > 0){
+            for (Cookie cookie : cookies){
+                if ("token".equals(cookie.getName())){
+                    token=cookie.getValue();
+                    break;
+                }
+            }
+        }
+        if (token==null){
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json; charset=utf-8");
             JSONObject jsonObject = new JSONObject();
@@ -36,7 +46,6 @@ public class LoginFilter implements HandlerInterceptor {
             out.close();
             return false;
         }
-        String token=String.valueOf(cookies);
         boolean verify = JwtUtil.getInstance().verify(token);
         if (verify){
             return true;
@@ -45,7 +54,7 @@ public class LoginFilter implements HandlerInterceptor {
             response.setContentType("application/json; charset=utf-8");
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code",HttpServletResponse.SC_GATEWAY_TIMEOUT);
-            jsonObject.put("msg","登录超时，请重新登录");
+            jsonObject.put("msg","登录异常，请重新登录");
             PrintWriter out = response.getWriter();
             out.write(jsonObject.toString());
             out.flush();

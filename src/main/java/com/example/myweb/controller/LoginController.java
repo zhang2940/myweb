@@ -53,6 +53,7 @@ public class LoginController {
             String token = JwtUtil.getInstance().create("token", objectObjectHashMap, "用户信息", new Date(System.currentTimeMillis() + (1800 * 1000)), new Date());
             Cookie cookie=new Cookie("token",token);
             cookie.setMaxAge(3600);
+            cookie.setPath("/");
             response.addCookie(cookie);
             return ResultVO.success();
         }catch (UnknownAccountException unknownAccountException){
@@ -81,7 +82,7 @@ public class LoginController {
      * @param user
      * @return
      */
-    @RequestMapping(value = "/region",method = RequestMethod.POST)
+    @RequestMapping(value = "/regions",method = RequestMethod.POST)
     public ResultVO region(@RequestBody User user){
         Integer region = loginService.region(user);
         if (region==0||region==null){

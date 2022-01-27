@@ -5,6 +5,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -34,6 +35,18 @@ public class RedisUtil {
     }
     public void putInHash(String key,Map map){
         redisTemplate.opsForHash().putAll(key,map);
+    }
+    public Long putInList(String key, List list){
+        Long aLong = redisTemplate.opsForList().rightPushAll(key, list);
+        return aLong;
+    }
+    public Object getInHash(String key){
+        Object o = redisTemplate.opsForValue().get(key);
+        return o;
+    }
+    public List getInList(String key){
+        return redisTemplate.opsForList().range(key,0,-1);
+
     }
 
 }

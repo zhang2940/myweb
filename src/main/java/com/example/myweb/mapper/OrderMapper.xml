@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.myweb.mapper.OrderMapper">
+    <select id="getMyOrder" parameterType="Integer" resultType="com.example.myweb.pojo.Houses">
+       select h.* from house h left join `order` o on o.house_id=o.user_id left join `user` u on u.id=o.user_id where o.user_id=#{userId,jdbcType=INTEGER}
+    </select>
+    <insert id="getHouses" parameterType="com.example.myweb.pojo.Houses">
+        insert into `order` values (null ,#{userId,jdbcType=INTEGER},#{houseId,jdbcType=INTEGER});
+    </insert>
+    <select id="getMyPreOrder" resultType="com.example.myweb.pojo.Houses">
+        select h.* from house h where h.id  in 
+        <foreach collection="myWishOrder" index="index" item="item" open="(" separator="," close=")">
+            #{item,jdbcType=VARCHAR}
+        </foreach>
+    </select>
+</mapper>

@@ -13,6 +13,6 @@ public class WebRegionFilter implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(loginFilter).addPathPatterns("/log/udp_pwd").addPathPatterns("/order/preOrder");
+        registry.addInterceptor(loginFilter).addPathPatterns("/log/udp_pwd").addPathPatterns("/order/**");
     }
 }
